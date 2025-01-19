@@ -4,12 +4,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
 
     accessBtn.addEventListener('click', () => {
-        accessScreen.style.animation = 'fadeOut 1s forwards';
+        const glitchTransition = document.querySelector('.glitch-transition');
+        const scanlines = document.createElement('div');
+        scanlines.className = 'glitch-scanlines';
+        document.body.appendChild(scanlines);
+        
+        glitchTransition.style.display = 'block';
+        scanlines.style.opacity = '1';
+        
+        // Effet de glitch intense
+        let glitchCount = 0;
+        const glitchInterval = setInterval(() => {
+            document.body.style.filter = `
+                hue-rotate(${Math.random() * 360}deg) 
+                blur(${Math.random() * 1}px)
+            `;
+            glitchTransition.style.transform = `
+                translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) 
+                skew(${Math.random() * 20 - 10}deg)
+            `;
+            glitchCount++;
+            
+            if (glitchCount > 30) {
+                clearInterval(glitchInterval);
+                document.body.style.filter = '';
+            }
+        }, 50);
+        
         setTimeout(() => {
-            accessScreen.classList.add('hidden');
-            mainContent.classList.remove('hidden');
-            mainContent.style.animation = 'fadeIn 1s forwards';
-        }, 1000);
+            accessScreen.style.animation = 'fadeOut 1s forwards';
+            setTimeout(() => {
+                accessScreen.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                mainContent.style.animation = 'fadeIn 1s forwards';
+                glitchTransition.style.display = 'none';
+                scanlines.remove();
+                document.body.style.animation = '';
+            }, 1000);
+        }, 2000);
     });
 
     // Effet de glitch aléatoire sur le texte
@@ -100,4 +132,20 @@ document.addEventListener('DOMContentLoaded', () => {
             title.style.textShadow = 'none';
         });
     });
+
+    // Effet de glitch supplémentaire sur l'image
+    const entityImage = document.querySelector('.entity-image');
+    setInterval(() => {
+        if (Math.random() > 0.7) {
+            entityImage.style.transform = `
+                translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)
+                scale(${1 + Math.random() * 0.1})
+                skew(${Math.random() * 10 - 5}deg)
+            `;
+            
+            setTimeout(() => {
+                entityImage.style.transform = 'none';
+            }, 100);
+        }
+    }, 2000);
 }); 

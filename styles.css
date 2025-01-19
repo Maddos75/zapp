@@ -55,7 +55,7 @@ body {
     width: 0%;
     height: 100%;
     background: var(--matrix-green);
-    animation: progress 3s ease-in-out;
+    animation: progress 3s ease-in-out forwards;
 }
 
 #access-btn {
@@ -267,4 +267,184 @@ body {
     margin-left: 20px;
     border-left: 3px solid var(--matrix-green);
     padding-left: 20px;
+}
+
+@keyframes glitchTransition {
+    0% {
+        clip-path: inset(50% 0 50% 0);
+        transform: skew(0deg);
+    }
+    10% {
+        clip-path: inset(10% 0 85% 0);
+        transform: skew(50deg);
+    }
+    20% {
+        clip-path: inset(85% 0 15% 0);
+        transform: skew(-40deg);
+    }
+    30% {
+        clip-path: inset(40% 0 43% 0);
+        transform: skew(20deg);
+    }
+    40% {
+        clip-path: inset(63% 0 36% 0);
+        transform: skew(-15deg);
+    }
+    50% {
+        clip-path: inset(25% 0 75% 0);
+        transform: skew(8deg);
+    }
+    60% {
+        clip-path: inset(75% 0 25% 0);
+        transform: skew(-8deg);
+    }
+    70% {
+        clip-path: inset(15% 0 85% 0);
+        transform: skew(15deg);
+    }
+    80% {
+        clip-path: inset(85% 0 15% 0);
+        transform: skew(-20deg);
+    }
+    90% {
+        clip-path: inset(5% 0 95% 0);
+        transform: skew(40deg);
+    }
+    100% {
+        clip-path: inset(50% 0 50% 0);
+        transform: skew(0deg);
+    }
+}
+
+@keyframes glitchText {
+    0% { transform: translate(0); filter: hue-rotate(0deg); }
+    25% { transform: translate(-20px, 5px) skew(15deg); filter: hue-rotate(90deg); }
+    50% { transform: translate(20px, -5px) skew(-15deg); filter: hue-rotate(180deg); }
+    75% { transform: translate(-15px, -5px) skew(5deg); filter: hue-rotate(270deg); }
+    100% { transform: translate(0); filter: hue-rotate(360deg); }
+}
+
+.glitch-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--dark-bg) 0%, #111 50%, var(--dark-bg) 100%);
+    z-index: 9999;
+    display: none;
+    animation: glitchTransition 0.2s linear infinite;
+}
+
+.glitch-transition::before,
+.glitch-transition::after {
+    content: "INITIALISATION DU PROTOCOLE D'ACCÈS";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--matrix-green);
+    font-size: 2em;
+    text-shadow: 2px 2px var(--error-red), -2px -2px #00f;
+    animation: glitchText 0.3s infinite;
+    white-space: nowrap;
+}
+
+.glitch-transition::before {
+    clip-path: inset(0 0 50% 0);
+    animation: glitchText 0.3s infinite;
+}
+
+.glitch-transition::after {
+    clip-path: inset(50% 0 0 0);
+    animation: glitchText 0.3s infinite reverse;
+}
+
+.glitch-scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 0, 0.1) 0px,
+        rgba(0, 255, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+@keyframes imageGlitch {
+    0% {
+        clip-path: inset(0 0 0 0);
+        transform: translate(0);
+        filter: hue-rotate(0deg);
+    }
+    10% {
+        clip-path: inset(10% 0 80% 0);
+        transform: translate(-2px, 2px);
+        filter: hue-rotate(90deg) saturate(200%);
+    }
+    20% {
+        clip-path: inset(30% 0 50% 0);
+        transform: translate(2px, -2px);
+        filter: hue-rotate(180deg) contrast(200%);
+    }
+    30% {
+        clip-path: inset(50% 0 30% 0);
+        transform: translate(-1px, 1px);
+        filter: hue-rotate(270deg) invert(100%);
+    }
+    40% {
+        clip-path: inset(0 0 0 0);
+        transform: translate(0);
+        filter: hue-rotate(0deg);
+    }
+}
+
+.entity-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.entity-image::before,
+.entity-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://i.imgur.com/IEgMGt1.png') no-repeat center;
+    background-size: contain;
+    animation: imageGlitch 5s infinite steps(1);
+}
+
+.entity-image::before {
+    opacity: 0.75;
+    animation-delay: -0.1s;
+    transform: translateX(-2px);
+    filter: hue-rotate(90deg);
+}
+
+.entity-image::after {
+    opacity: 0.75;
+    animation-delay: -0.2s;
+    transform: translateX(2px);
+    filter: hue-rotate(-90deg);
+}
+
+.entity-image img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid var(--matrix-green);
+    margin: 20px 0;
+    position: relative;
+    z-index: 1;
+    animation: imageGlitch 3s infinite steps(1);
 } 
